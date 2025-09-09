@@ -1,0 +1,116 @@
+.timeline {
+  @include flex-column-relative;
+  margin: 0 auto;
+  max-width: 1200px;
+
+  padding: 40px 0;
+
+  &:before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    width: 2px;
+    height: 98%;
+    margin-left: -1px;
+    background: #e0e0e0;
+  }
+
+  &-container {
+    @include flex-column-relative;
+    gap: 40px;
+  }
+
+  &-components {
+    width: calc(50% - 40px);
+    padding: 30px;
+    background: $background-components;
+    border-radius: 8px;
+    border: 1px solid $border-timeline;
+    position: relative;
+    margin: 20px 0;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+
+    &:hover {
+      opacity: 1;
+      transform: translateY(-5px);
+    }
+
+    &:nth-child(odd) {
+      align-self: flex-start;
+      margin-right: auto;
+    }
+
+    &:nth-child(even) {
+      align-self: flex-end;
+      margin-left: auto;
+    }
+
+    &:before {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: $bronze;
+      border-radius: 50%;
+      top: 30px;
+    }
+
+    &:nth-child(odd):before {
+      right: -50px;
+    }
+
+    &:nth-child(even):before {
+      left: -50px;
+    }
+
+    &-title {
+      font-weight: 400;
+      font-size: 24px;
+      margin: 0 0 15px 0;
+      color: $bronze;
+      transition: 0.4s;
+      font-family: Arimo;
+    }
+
+    &-specs {
+      margin: 0 0 8px 0;
+      color: $text-timeline;
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 1.5;
+      font-family: Arimo;
+
+      &:first-of-type {
+        font-size: 18px;
+        font-weight: 400;
+        margin-bottom: 12px;
+        color: $text-timeline;
+      }
+    }
+  }
+
+  &__img {
+    max-width: 100%;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
+  }
+
+  &-header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 80px;
+
+    &__title {
+      font-size: 46px;
+      margin: 0;
+    }
+
+    &__subtitle {
+      font-size: 22px;
+      font-weight: 300;
+      color: $text-timeline;
+      letter-spacing: 1.5px;
+      margin-top: 20px;
+    }
+  }
+}

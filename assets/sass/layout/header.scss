@@ -1,0 +1,18 @@
+.container-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: $body-text;
+  font-family: Oswald;
+
+  h1 {
+    font-weight: 400;
+    letter-spacing: 2px;
+  }
+  h2 {
+    font-weight: 300;
+    color: $bronze;
+    letter-spacing: $spacing-1;
+  }
+}

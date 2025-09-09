@@ -1,3 +1,7 @@
+// FONTS //
+
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&display=swap");
 // ABSTRACTS //
 
 @import "abstracts/variables";
@@ -7,9 +11,9 @@
 
 @import "base/reset";
 @import "base/typography";
+@import "base/base";
 
 // LAYOUT //
-
 @import "layout/header";
 @import "layout/footer";
 
