@@ -12,12 +12,13 @@
   border: 2px solid $bronze;
   border-radius: 12px;
   position: relative;
-  background: white;
+  background: rgba(255, 255, 255, 0.701);
   box-shadow: 0 8px 32px rgba($bronze, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
-    transform: translateY(-5px);
+    transform: scale(1.5);
     box-shadow: 0 12px 40px rgba($bronze, 0.25);
+    background-color: rgb(221, 221, 221);
   }
 }

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Porsche Timeline - Évolution des Modèles Iconiques 911</title>
     <link rel="stylesheet" href="assets/css/style.css" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
   </head>
   <body>
     <header>
@@ -17,7 +18,11 @@
       <div class="timeline">
         <div class="timeline-container">
           <!-- 911 -->
-          <div class="timeline-components">
+          <div
+            data-aos="fade-right"
+            data-aos-duration="1200"
+            class="timeline-components"
+          >
             <h3 class="timeline-components-title">Porsche 911 (1964)</h3>
             <h4 class="timeline-components-specs">L’icône intemporelle</h4>
             <div class="container-viewer">
@@ -33,7 +38,11 @@
           </div>
 
           <!-- 930 -->
-          <div class="timeline-components">
+          <div
+            data-aos="fade-left"
+            data-aos-duration="1200"
+            class="timeline-components"
+          >
             <h3 class="timeline-components-title">Porsche 930 Turbo (1975)</h3>
             <h4 class="timeline-components-specs">Le turbo brutal</h4>
             <div class="container-viewer">
@@ -49,7 +58,11 @@
           </div>
 
           <!-- 956 -->
-          <div class="timeline-components">
+          <div
+            data-aos="fade-right"
+            data-aos-duration="1200"
+            class="timeline-components"
+          >
             <h3 class="timeline-components-title">Porsche 956 (1982)</h3>
             <h4 class="timeline-components-specs">La reine du Mans</h4>
             <div class="container-viewer">
@@ -67,7 +80,11 @@
           </div>
 
           <!-- 993 -->
-          <div class="timeline-components">
+          <div
+            data-aos="fade-left"
+            data-aos-duration="1200"
+            class="timeline-components"
+          >
             <h3 class="timeline-components-title">Porsche 993 (1993)</h3>
             <h4 class="timeline-components-specs">
               La dernière refroidie par air
@@ -85,7 +102,11 @@
           </div>
 
           <!-- 991 Turbo S -->
-          <div class="timeline-components">
+          <div
+            data-aos="fade-right"
+            data-aos-duration="1200"
+            class="timeline-components"
+          >
             <h3 class="timeline-components-title">
               Porsche 911 991 Turbo S (2016)
             </h3>
@@ -103,7 +124,11 @@
           </div>
 
           <!-- 911 GT2 RS -->
-          <div class="timeline-components">
+          <div
+            data-aos="fade-left"
+            data-aos-duration="1200"
+            class="timeline-components"
+          >
             <h3 class="timeline-components-title">
               Porsche 911 991 GT2 RS (2018)
             </h3>
@@ -121,7 +146,11 @@
           </div>
 
           <!-- 911 GT3 RS -->
-          <div class="timeline-components">
+          <div
+            data-aos="fade-right"
+            data-aos-duration="1200"
+            class="timeline-components"
+          >
             <h3 class="timeline-components-title">
               Porsche 911 991 GT3 RS (2015)
             </h3>
@@ -141,7 +170,11 @@
           </div>
 
           <!-- 992 GT3 -->
-          <div class="timeline-components">
+          <div
+            data-aos="fade-left"
+            data-aos-duration="1200"
+            class="timeline-components"
+          >
             <h3 class="timeline-components-title">
               Porsche 911 992 GT3 (2021)
             </h3>
@@ -161,7 +194,11 @@
           </div>
 
           <!-- 992 GT3 RS -->
-          <div class="timeline-components">
+          <div
+            data-aos="fade-right"
+            data-aos-duration="1200"
+            class="timeline-components"
+          >
             <h3 class="timeline-components-title">
               Porsche 911 992 GT3 RS (2022)
             </h3>
@@ -189,5 +226,9 @@
       </p>
     </footer>
     <script type="module" src="script/app.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
   </body>
 </html>
