@@ -26,14 +26,19 @@
     background: $background-components;
     border-radius: 8px;
     border: 1px solid $border-timeline;
+    border-top: 3px solid $bronze;
     position: relative;
     margin: 20px 0;
     opacity: 0.8;
-    transition: all 0.3s ease;
+    transition: opacity 0.8s ease, transform 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+      border-color 1.8s ease-in-out;
 
     &:hover {
       opacity: 1;
       transform: translateY(-5px);
+      border-left: 1px solid $bronze;
+      border-right: 1px solid $bronze;
+      border-bottom: 1px solid $bronze;
     }
 
     &:nth-child(odd) {
@@ -114,5 +119,8 @@
       letter-spacing: 1.5px;
       margin-top: 20px;
     }
+  }
+  .spanbronze{
+    color: $bronze;
   }
 }

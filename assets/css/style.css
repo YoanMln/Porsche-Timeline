@@ -7,7 +7,8 @@
 }
 
 body {
-  background-color: #222831;
+  background: #1f1e1e;
+  background: linear-gradient(180deg, rgb(31, 30, 30) 0%, rgb(23, 22, 22) 90%);
 }
 
 .container-title {
@@ -77,17 +78,21 @@ footer a:hover {
 .timeline-components {
   width: calc(50% - 40px);
   padding: 30px;
-  background: rgba(66, 66, 66, 0.6980392157);
+  background: #1f1e1e;
   border-radius: 8px;
-  border: 1px solid #b5b5b5;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 3px solid #ad856f;
   position: relative;
   margin: 20px 0;
   opacity: 0.8;
-  transition: all 0.3s ease;
+  transition: opacity 0.8s ease, transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 1.8s ease-in-out;
 }
 .timeline-components:hover {
   opacity: 1;
   transform: translateY(-5px);
+  border-left: 1px solid #ad856f;
+  border-right: 1px solid #ad856f;
+  border-bottom: 1px solid #ad856f;
 }
 .timeline-components:nth-child(odd) {
   align-self: flex-start;
@@ -156,6 +161,9 @@ footer a:hover {
   letter-spacing: 1.5px;
   margin-top: 20px;
 }
+.timeline .spanbronze {
+  color: #ad856f;
+}
 
 .container-viewer {
   display: flex;
@@ -179,6 +187,13 @@ footer a:hover {
   transform: scale(1.5);
   box-shadow: 0 12px 40px rgba(173, 133, 111, 0.25);
   background-color: rgb(221, 221, 221);
+}
+
+span.separator {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  height: 10px;
+  display: block;
 }
 
 /*# sourceMappingURL=style.css.map */
