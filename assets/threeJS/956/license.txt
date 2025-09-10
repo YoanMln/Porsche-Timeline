@@ -1,0 +1,11 @@
+Model Information:
+* title:	Porsche 959
+* source:	https://sketchfab.com/3d-models/porsche-959-0530aa8fa4b74427a71c961a5bdd7087
+* author:	Alexios Apokaukos (https://sketchfab.com/Alexios_Apokaukos)
+
+Model License:
+* license type:	CC-BY-SA-4.0 (http://creativecommons.org/licenses/by-sa/4.0/)
+* requirements:	Author must be credited. Modified versions must have the same license. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Porsche 959" (https://sketchfab.com/3d-models/porsche-959-0530aa8fa4b74427a71c961a5bdd7087) by Alexios Apokaukos (https://sketchfab.com/Alexios_Apokaukos) licensed under CC-BY-SA-4.0 (http://creativecommons.org/licenses/by-sa/4.0/)

@@ -1,0 +1,11 @@
+Model Information:
+* title:	2021 Porsche 911 GT3
+* source:	https://sketchfab.com/3d-models/2021-porsche-911-gt3-931e8121d2f3495f97f6836fb99ccaac
+* author:	OUTPISTON (https://sketchfab.com/outpiston)
+
+Model License:
+* license type:	CC-BY-NC-SA-4.0 (http://creativecommons.org/licenses/by-nc-sa/4.0/)
+* requirements:	Author must be credited. No commercial use. Modified versions must have the same license.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "2021 Porsche 911 GT3" (https://sketchfab.com/3d-models/2021-porsche-911-gt3-931e8121d2f3495f97f6836fb99ccaac) by OUTPISTON (https://sketchfab.com/outpiston) licensed under CC-BY-NC-SA-4.0 (http://creativecommons.org/licenses/by-nc-sa/4.0/)
