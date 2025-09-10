@@ -1,5 +1,6 @@
 import * as THREE from "./lib/three.module.js";
 import { GLTFLoader } from "./lib/GLTFLoader.js";
+import { OrbitControls } from "./lib/OrbitControls.js";
 
 // Sélectionne toutes les div .viewer
 const viewers = document.querySelectorAll(".viewer");
@@ -11,7 +12,7 @@ viewers.forEach((viewer) => {
   const scene = new THREE.Scene();
 
   const camera = new THREE.PerspectiveCamera(
-    70,
+    60,
     viewer.clientWidth / viewer.clientHeight,
     0.1,
     1000
@@ -26,11 +27,11 @@ viewers.forEach((viewer) => {
   viewer.appendChild(renderer.domElement);
 
   // Lumières améliorées
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
   directionalLight.position.set(5, 10, 7.5);
-  const pointLight = new THREE.PointLight(0xffffff, 0.5);
-  pointLight.position.set(-5, 5, 5);
+  const pointLight = new THREE.PointLight(0xffffff, 0.7);
+  pointLight.position.set(0, 10, 10);
 
   scene.add(ambientLight);
   scene.add(directionalLight);
@@ -61,6 +62,9 @@ viewers.forEach((viewer) => {
       // Centrer le modèle
       model.position.sub(center);
 
+      // Agrandir le modèle
+      model.scale.setScalar(1.5); // 150% de la taille originale
+
       // Positionner la caméra
       const maxDim = Math.max(size.x, size.y, size.z);
       const fov = camera.fov * (Math.PI / 180);
@@ -89,6 +93,8 @@ viewers.forEach((viewer) => {
   function animate() {
     requestAnimationFrame(animate);
 
+    controls.update();
+
     if (model) {
       model.rotation.y += 0.005;
     }
@@ -105,4 +111,7 @@ viewers.forEach((viewer) => {
     camera.updateProjectionMatrix();
     renderer.setSize(width, height);
   });
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
 });
