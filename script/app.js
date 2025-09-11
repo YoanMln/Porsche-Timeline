@@ -27,7 +27,7 @@ viewers.forEach((viewer) => {
   viewer.appendChild(renderer.domElement);
 
   // Lumières améliorées
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
   const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
   directionalLight.position.set(5, 10, 7.5);
   const pointLight = new THREE.PointLight(0xffffff, 0.7);
