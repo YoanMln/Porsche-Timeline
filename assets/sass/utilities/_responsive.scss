@@ -1,0 +1,27 @@
+@media screen and (max-width: 780px) {
+  .timeline {
+    &-container {
+      gap: 20px;
+    }
+    &-components {
+      background: rgba(12, 12, 12, 0.717);
+      width: calc(100% - 40px);
+      margin: 15px auto;
+      padding: 20px 15px;
+      &:nth-child(odd),
+      &:nth-child(even) {
+        align-self: center;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      &::before {
+        display: none;
+      }
+    }
+  }
+
+  .viewer:hover {
+    transform: none !important;
+  }
+}
