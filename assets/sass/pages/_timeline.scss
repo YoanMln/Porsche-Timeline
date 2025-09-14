@@ -23,23 +23,49 @@
   &-components {
     width: calc(50% - 40px);
     padding: 40px 35px;
-    background: rgba(66, 66, 66, 0.08);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    border: 0.1px solid $border-card;
-    border-top: 5px solid $bronze;
+
+    
+    background: rgba(66, 66, 66, 0.12);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    
+    box-shadow: 
+      
+      20px 20px 40px rgba(0, 0, 0, 0.3),
+      -20px -20px 40px rgba(255, 255, 255, 0.05),
+     
+      inset 2px 2px 4px rgba(255, 255, 255, 0.1),
+      inset -2px -2px 4px rgba(0, 0, 0, 0.2);
+
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 3px solid $bronze;
     position: relative;
     margin: 20px 0;
-    opacity: 0.8;
+    opacity: 0.85;
+
     transition: opacity 0.8s ease, transform 1.2s cubic-bezier(0.4, 0, 0.2, 1),
-      border-color 1.8s ease-in-out;
+      box-shadow 1s ease, background 0.6s ease;
 
     &:hover {
       opacity: 1;
-      transform: translateY(-5px);
-      border-left: 1px solid $bronze;
-      border-right: 1px solid $bronze;
-      border-bottom: 1px solid $bronze;
+      transform: translateY(-8px) scale(1.02);
+
+      
+      background: rgba(66, 66, 66, 0.18);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+
+     
+      box-shadow: 25px 25px 50px rgba(0, 0, 0, 0.4),
+        -25px -25px 50px rgba(255, 255, 255, 0.08),
+        inset 3px 3px 6px rgba(255, 255, 255, 0.15),
+        inset -3px -3px 6px rgba(0, 0, 0, 0.25),
+       
+        0 0 30px rgba($bronze, 0.3);
+
+      border: 1px solid rgba($bronze, 0.4);
     }
 
     &:nth-child(odd) {

@@ -11,6 +11,17 @@ $text-timeline: #f1f1f1;
 $border-card: #808080;
 $separator: #d3d3d3;
 
+// GLASSMORPHISM & NEUMORPHISM //
+$glass-primary: rgba(66, 66, 66, 0.12);
+$glass-hover: rgba(66, 66, 66, 0.18);
+$glass-border: rgba(255, 255, 255, 0.1);
+$glass-border-hover: rgba($bronze, 0.4);
+
+$shadow-dark: rgba(0, 0, 0, 0.3);
+$shadow-light: rgba(255, 255, 255, 0.05);
+$shadow-inner-light: rgba(255, 255, 255, 0.1);
+$shadow-inner-dark: rgba(0, 0, 0, 0.2);
+
 // SPACING //
 
 $spacing-1: 1px;
