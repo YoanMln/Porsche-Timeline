@@ -12,7 +12,11 @@
   border: 1px solid $bronze;
   border-radius: 12px;
   position: relative;
-  background: transparent;
+  background: url(../images/track.webp);
+  backdrop-filter: blur(10px);
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
   box-shadow: 0 8px 32px rgba($bronze, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
