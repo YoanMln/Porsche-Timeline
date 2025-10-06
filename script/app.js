@@ -6,6 +6,15 @@ import { OrbitControls } from "./lib/OrbitControls.js";
 const modelCache = new Map();
 const loader = new GLTFLoader();
 
+// Fonction pour détecter mobile
+function isMobile() {
+  return (
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    ) || window.innerWidth <= 768
+  );
+}
+
 // Fonction pour créer une scène Three.js
 function createScene(viewer) {
   const scene = new THREE.Scene();
@@ -17,15 +26,33 @@ function createScene(viewer) {
     1000
   );
 
+  // Configuration renderer
   const renderer = new THREE.WebGLRenderer({
-    antialias: true,
+    antialias: !isMobile(),
     alpha: true,
-    powerPreference: "high-performance", // Optimisation GPU
+    powerPreference: "default",
+    precision: "mediump",
+    stencil: false,
+    depth: true,
+    logarithmicDepthBuffer: false,
   });
 
   renderer.setSize(viewer.clientWidth, viewer.clientHeight);
   renderer.setClearColor(0x000000, 0);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limiter pixel ratio
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+
+  // Limite la taille du renderer sur mobile
+  const maxSize = isMobile() ? 512 : 1024;
+  if (viewer.clientWidth > maxSize || viewer.clientHeight > maxSize) {
+    const scale = Math.min(
+      maxSize / viewer.clientWidth,
+      maxSize / viewer.clientHeight
+    );
+    renderer.setSize(viewer.clientWidth * scale, viewer.clientHeight * scale);
+    renderer.domElement.style.width = "100%";
+    renderer.domElement.style.height = "100%";
+  }
+
   viewer.appendChild(renderer.domElement);
 
   // Lumières optimisées
@@ -51,8 +78,11 @@ function loadModel(viewer) {
     return;
   }
 
-  // Afficher un loader
+  // Afficher un loader avec ID unique
   const loadingElement = document.createElement("div");
+  const loaderId = `progress-${Date.now()}-${Math.random()
+    .toString(36)
+    .substr(2, 9)}`;
   loadingElement.innerHTML = `
     <div style="
       position: absolute;
@@ -65,7 +95,7 @@ function loadModel(viewer) {
       text-align: center;
     ">
       <div style="margin-bottom: 10px;">Chargement 3D...</div>
-      <div id="progress-${viewer.dataset.model}" style="font-size: 12px;">0%</div>
+      <div id="${loaderId}" style="font-size: 12px;">0%</div>
     </div>
   `;
   viewer.appendChild(loadingElement);
@@ -78,7 +108,9 @@ function loadModel(viewer) {
       modelCache.set(modelPath, gltf.scene);
 
       // Supprimer le loader
-      viewer.removeChild(loadingElement);
+      if (viewer.contains(loadingElement)) {
+        viewer.removeChild(loadingElement);
+      }
 
       // Setup du modèle
       setupModel(viewer, gltf.scene);
@@ -86,17 +118,23 @@ function loadModel(viewer) {
       console.log(`Modèle ${modelPath} chargé et mis en cache`);
     },
     (xhr) => {
-      const progress = Math.round((xhr.loaded / xhr.total) * 100);
-      const progressElement = document.getElementById(
-        `progress-${viewer.dataset.model}`
-      );
-      if (progressElement) {
-        progressElement.textContent = `${progress}%`;
+      // Calcul du pourcentage
+      if (xhr.lengthComputable && xhr.total > 0) {
+        const progress = Math.min(
+          Math.max(Math.round((xhr.loaded / xhr.total) * 100), 0),
+          100
+        );
+        const progressElement = document.getElementById(loaderId);
+        if (progressElement) {
+          progressElement.textContent = `${progress}%`;
+        }
       }
     },
     (error) => {
       console.error("Erreur de chargement :", error);
-      viewer.removeChild(loadingElement);
+      if (viewer.contains(loadingElement)) {
+        viewer.removeChild(loadingElement);
+      }
     }
   );
 }
@@ -106,6 +144,20 @@ function setupModel(viewer, modelScene) {
   const { scene, camera, renderer } = createScene(viewer);
 
   const model = modelScene.clone();
+
+  // Réduire la qualité sur mobile
+  if (isMobile()) {
+    model.traverse((child) => {
+      if (child.isMesh) {
+        child.material.wireframe = false;
+        if (child.material.map) {
+          child.material.map.minFilter = THREE.LinearFilter;
+          child.material.map.magFilter = THREE.LinearFilter;
+        }
+      }
+    });
+  }
+
   scene.add(model);
 
   // Calculer la boîte englobante
@@ -158,18 +210,17 @@ function setupModel(viewer, modelScene) {
 
   visibilityObserver.observe(viewer);
 
-  // Fonction d'animation optimisée
   function animate() {
     animationId = requestAnimationFrame(animate);
 
     if (isVisible) {
       controls.update();
-      model.rotation.y += 0.005;
+
+      model.rotation.y += isMobile() ? 0.003 : 0.005;
       renderer.render(scene, camera);
     }
   }
 
-  // Redimensionnement optimisé avec debounce
   let resizeTimeout;
   window.addEventListener("resize", () => {
     clearTimeout(resizeTimeout);
@@ -211,7 +262,7 @@ const lazyLoadObserver = new IntersectionObserver(
     });
   },
   {
-    rootMargin: "50px", // Charger 50px avant d'être visible
+    rootMargin: "50px",
   }
 );
 
@@ -224,7 +275,6 @@ viewers.forEach((viewer) => {
 if (viewers.length > 0) {
   const firstViewer = viewers[0];
   if (firstViewer.dataset.model && !firstViewer.dataset.loaded) {
-    // Marquer comme chargé AVANT de charger
     firstViewer.dataset.loaded = "true";
     lazyLoadObserver.unobserve(firstViewer);
 
