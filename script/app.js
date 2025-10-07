@@ -6,16 +6,36 @@ import { OrbitControls } from "./lib/OrbitControls.js";
 const modelCache = new Map();
 const loader = new GLTFLoader();
 
-// Fonction pour détecter mobile
+// Variables globales pour la gestion mémoire
+let activeScenes = [];
+const MAX_ACTIVE_SCENES = 2;
+
 function isMobile() {
-  return (
+  const userAgent = navigator.userAgent;
+  const isMobileDevice =
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    ) || window.innerWidth <= 768
-  );
+      userAgent
+    );
+  const isSmallScreen = window.innerWidth <= 768;
+  const isLowMemory = navigator.deviceMemory && navigator.deviceMemory < 4;
+
+  return isMobileDevice || isSmallScreen || isLowMemory;
 }
 
-// Fonction pour créer une scène Three.js
+// Fonction pour nettoyer les scènes inactives
+function cleanupInactiveScenes() {
+  if (activeScenes.length > MAX_ACTIVE_SCENES) {
+    const oldestScene = activeScenes.shift();
+    if (oldestScene && oldestScene.renderer) {
+      oldestScene.renderer.dispose();
+      oldestScene.scene.clear();
+      if (oldestScene.controls) {
+        oldestScene.controls.dispose();
+      }
+    }
+  }
+}
+
 function createScene(viewer) {
   const scene = new THREE.Scene();
 
@@ -26,43 +46,75 @@ function createScene(viewer) {
     1000
   );
 
-  // Configuration renderer
-  const renderer = new THREE.WebGLRenderer({
-    antialias: !isMobile(),
+  const rendererConfig = {
     alpha: true,
-    powerPreference: "default",
-    precision: "mediump",
     stencil: false,
     depth: true,
     logarithmicDepthBuffer: false,
-  });
+  };
 
-  renderer.setSize(viewer.clientWidth, viewer.clientHeight);
+  if (isMobile()) {
+    rendererConfig.antialias = false;
+    rendererConfig.powerPreference = "low-power";
+    rendererConfig.precision = "lowp";
+    rendererConfig.preserveDrawingBuffer = false;
+  } else {
+    rendererConfig.antialias = true;
+    rendererConfig.powerPreference = "default";
+    rendererConfig.precision = "mediump";
+  }
+
+  const renderer = new THREE.WebGLRenderer(rendererConfig);
+
+  let renderWidth = viewer.clientWidth;
+  let renderHeight = viewer.clientHeight;
+
+  if (isMobile()) {
+    const maxSize = 400;
+    if (renderWidth > maxSize) {
+      const scale = maxSize / renderWidth;
+      renderWidth = maxSize;
+      renderHeight = renderHeight * scale;
+    }
+  }
+
+  renderer.setSize(renderWidth, renderHeight);
   renderer.setClearColor(0x000000, 0);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 
-  // Limite la taille du renderer sur mobile
-  const maxSize = isMobile() ? 512 : 1024;
-  if (viewer.clientWidth > maxSize || viewer.clientHeight > maxSize) {
-    const scale = Math.min(
-      maxSize / viewer.clientWidth,
-      maxSize / viewer.clientHeight
-    );
-    renderer.setSize(viewer.clientWidth * scale, viewer.clientHeight * scale);
+  const pixelRatio = isMobile()
+    ? Math.min(window.devicePixelRatio, 1)
+    : Math.min(window.devicePixelRatio, 1.5);
+  renderer.setPixelRatio(pixelRatio);
+
+  if (
+    isMobile() &&
+    (renderWidth !== viewer.clientWidth || renderHeight !== viewer.clientHeight)
+  ) {
     renderer.domElement.style.width = "100%";
     renderer.domElement.style.height = "100%";
+    renderer.domElement.style.objectFit = "contain";
   }
 
   viewer.appendChild(renderer.domElement);
 
-  // Lumières optimisées
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
-  directionalLight.position.set(5, 10, 7.5);
-  const pointLight = new THREE.PointLight(0xffffff, 0.7);
-  pointLight.position.set(0, 10, 10);
+  if (isMobile()) {
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight.position.set(5, 10, 7.5);
+    scene.add(ambientLight, directionalLight);
+  } else {
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    directionalLight.position.set(5, 10, 7.5);
+    const pointLight = new THREE.PointLight(0xffffff, 0.7);
+    pointLight.position.set(0, 10, 10);
+    scene.add(ambientLight, directionalLight, pointLight);
+  }
 
-  scene.add(ambientLight, directionalLight, pointLight);
+  // Ajouter à la liste des scènes actives
+  const sceneData = { scene, camera, renderer, viewer };
+  activeScenes.push(sceneData);
+  cleanupInactiveScenes();
 
   return { scene, camera, renderer };
 }
@@ -78,7 +130,6 @@ function loadModel(viewer) {
     return;
   }
 
-  // Afficher un loader avec ID unique
   const loadingElement = document.createElement("div");
   const loaderId = `progress-${Date.now()}-${Math.random()
     .toString(36)
@@ -139,13 +190,11 @@ function loadModel(viewer) {
   );
 }
 
-// Fonction pour setup un modèle dans la scène
 function setupModel(viewer, modelScene) {
   const { scene, camera, renderer } = createScene(viewer);
 
   const model = modelScene.clone();
 
-  // Réduire la qualité sur mobile
   if (isMobile()) {
     model.traverse((child) => {
       if (child.isMesh) {
@@ -247,7 +296,6 @@ function setupModel(viewer, modelScene) {
   });
 }
 
-// Lazy Loading avec Intersection Observer
 const viewers = document.querySelectorAll(".viewer");
 
 const lazyLoadObserver = new IntersectionObserver(
@@ -256,7 +304,7 @@ const lazyLoadObserver = new IntersectionObserver(
       if (entry.isIntersecting && !entry.target.dataset.loaded) {
         loadModel(entry.target);
         entry.target.dataset.loaded = "true";
-        // Arrêter d'observer ce viewer
+
         lazyLoadObserver.unobserve(entry.target);
       }
     });
@@ -266,12 +314,10 @@ const lazyLoadObserver = new IntersectionObserver(
   }
 );
 
-// Observer tous les viewers
 viewers.forEach((viewer) => {
   lazyLoadObserver.observe(viewer);
 });
 
-// Précharger le premier modèle visible immédiatement
 if (viewers.length > 0) {
   const firstViewer = viewers[0];
   if (firstViewer.dataset.model && !firstViewer.dataset.loaded) {
